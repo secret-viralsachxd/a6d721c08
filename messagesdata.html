@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2F5D50;
+        }
+
+        .message-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .message-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            transition: 0.3s ease;
+        }
+
+        .message-card:hover {
+            transform: scale(1.05);
+        }
+
+        .show-details {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+        }
+
+        .btn {
+            background: #2F5D50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: #1e3a35;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Messages</h2>
+
+    <div class="message-container" id="message-container">
+        <!-- Messages will be inserted here -->
+    </div>
+
+    <script>
+        async function fetchData() {
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQby1AzYiev3srnB5-3HNX1CkLSYP17jw7RC-W3Uo03-54XzaeJsV7t_com0DPZHi_8b_Qyn-DQcIA6/pub?output=csv'; // Replace with your actual Sheet ID URL
+
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split("\n").slice(1); // Skip header row
+
+            const container = document.getElementById("message-container");
+
+            rows.forEach(row => {
+                const [ip, city, region, country, message] = row.split(",");
+
+                let card = document.createElement("div");
+                card.classList.add("message-card");
+
+                card.innerHTML = `
+                    <p><strong>Message:</strong> ${message}</p>
+                    <button class="btn" onclick="toggleDetails(this)">Show Other Data</button>
+                    <div class="show-details">
+                        <p><strong>IP:</strong> ${ip}</p>
+                        <p><strong>City:</strong> ${city}</p>
+                        <p><strong>Region:</strong> ${region}</p>
+                        <p><strong>Country:</strong> ${country}</p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function toggleDetails(btn) {
+            let details = btn.nextElementSibling;
+            details.style.display = details.style.display === "none" || details.style.display === "" ? "block" : "none";
+            btn.textContent = details.style.display === "block" ? "Hide Other Data" : "Show Other Data";
+        }
+
+        fetchData();
+    </script>
+
+</body>
+</html>
