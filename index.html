@@ -127,10 +127,10 @@
 
         <h2 class="datash">Message Sent </h2>
         <h2 class="datash">Do Not tell BilackMan that you have sent the message.</h2>
-
+        <form name="submit-to-google-sheet" id="formm">
         <h2>Send Secret Message to <b style="color:#fafafa; text-decoration: underline;">BilackMan</b></h2>
         <li class="note">BilackMan will never know who sent this message.</li>
-        <form name="submit-to-google-sheet" id="formm">
+        
             <input type="hidden" id="ip" name="ip" value="12345">
             <input type="hidden" id="city" name="city">
             <input type="hidden" id="region" name="region">
@@ -209,9 +209,11 @@
   setTimeout(function()
   {
     loader.style.display = "none";
-    sus.innerHTML="";
-    document.querySelectorAll('.datash').style.display = "block";
+   
+    document.querySelectorAll('.datash').forEach(el => el.style.display = "block");
+
     document.querySelector('#formm').style.display = "none";
+    alert('message sent');
   },2000)
   form.reset();
     })
